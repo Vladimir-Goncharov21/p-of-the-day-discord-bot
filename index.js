@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { Client, GatewayIntentBits, Collection } from 'discord.js';
+import { Client, GatewayIntentBits, Collection, Events } from 'discord.js';
 import { fileURLToPath } from 'url';
 import { join, dirname } from 'path';
 import { readdirSync } from 'fs';
@@ -13,7 +13,8 @@ const DiscordClient = new Client({ intents: [GatewayIntentBits.Guilds] });
 DiscordClient.commands = new Collection();
 
 for (const file of commandFolders) {
-  let command = await import(join(foldersPath, file));
+  // TODO: file:// need only for Windows, find a way get System and dinamically set path
+  let command = await import(`file://${join(foldersPath, file)}`);
   DiscordClient.commands.set(command.data.name, command);
 }
 
